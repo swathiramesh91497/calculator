@@ -1,3 +1,5 @@
+package calculator;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -8,24 +10,40 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class MathProblem {
     private final String operation;
-    private final List<String> inputs;
-    private final float result;
+    private final List<Float> inputs;
 
-    public MathProblem(@JsonProperty String operation, @JsonProperty List<String> inputs, @JsonProperty float result){
+    public MathProblem(@JsonProperty String operation, @JsonProperty List<Float> inputs){
         this.operation = operation;
+        //TODO: case of inputs length being < 2
         this.inputs = inputs;
-        this.result = result;
     }
 
     public String getOperation() {
         return operation;
     }
 
-    public List<String> getInputs() {
+    public List<Float> getInputs() {
         return inputs;
     }
 
     public float getResult() {
-        return result;
+        // Temporary
+        float tot = 0f;
+        for (Float input: inputs){
+            switch (operation) {
+                case "+":
+                    tot += input;
+                case "-":
+                    tot -= input;
+                case "*":
+                    tot *= input;
+                case "/":
+                    tot /= input;
+                default:
+                    // TODO: Fix
+                    throw new RuntimeException();
+                }
+            }
+            return tot;
     }
 }
