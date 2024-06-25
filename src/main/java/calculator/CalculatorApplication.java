@@ -20,7 +20,6 @@ public class CalculatorApplication extends Application<CalculatorConfig> {
     @Override
     public void setupResources(Configurable<?> config, CalculatorConfig calculatorConfig) {
         config.register(new CalculatorResource(calculatorConfig));
-        config.property(ServletProperties.FILTER_STATIC_CONTENT_REGEX, "/(static/.*|.*\\.html|)");
         config.register(new SwaggerFilesResource());
     }
 

@@ -1,0 +1,34 @@
+swagger: "2.0"
+info:
+  description: |
+    Swathi's 2023 onboarding ticket for Confluent
+  version: "v1"
+  title: "Swathi's Calculator"
+
+tags:
+  - name: Calculator API
+    description: Has four operations and an audit endpoint
+
+host: "localhost:8080/calculator"
+schemes:
+  - "http"
+paths:
+  /add:
+    get:
+      tags:
+        - Add two integers
+      summary: |
+        Adds two integers
+      description: Given two integers, it adds them.
+      operationId: add
+      parameters:
+        - name: inputs
+          in: query
+          required: true
+          description: Any integers to add
+          type: List<Float>
+      responses:
+        '200':
+          description: Authenticated
+        '404':
+          description: Invalid input. Expecting 32-bit integers.
