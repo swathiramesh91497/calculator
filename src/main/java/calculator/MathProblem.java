@@ -28,20 +28,26 @@ public class MathProblem {
 
     public float getResult() {
         // Temporary
-        float tot = 0f;
-        for (Float input: inputs){
+        float tot = inputs.get(0);
+        for (int i = 1; i < inputs.size(); i++){
+            float input = inputs.get(i);
+            System.out.println("HELLO");
             switch (operation) {
                 case "+":
                     tot += input;
+                    break;
                 case "-":
                     tot -= input;
+                    break;
                 case "*":
                     tot *= input;
+                    break;
                 case "/":
-                    tot /= input;
+                    tot = tot/input;
+                    break;
                 default:
                     // TODO: Fix
-                    throw new RuntimeException();
+                    throw new RuntimeException("ERROR WITH MATHING");
                 }
             }
             return tot;
