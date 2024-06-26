@@ -50,40 +50,34 @@ public class CalculatorResource {
 
     @GET
     @Path("/add")
-    public CalculatorResponse add(@QueryParam("inputs") List<Float> inputs){
-        log.info("Add request " + inputs);
+    public CalculatorResponse add(@QueryParam("inputs") List<Float> inputs) throws Exception {
         MathProblem mathProblem = new MathProblem("+", inputs);
-        float result = mathProblem.getResult();
-        log.info("RESULT" + result);
         mathProblems.add(mathProblem);
-        return new CalculatorResponse(result);
+        return new CalculatorResponse(mathProblem.getResult());
     }
 
     @GET
     @Path("/subtract")
-    public CalculatorResponse subtract(@QueryParam("inputs") List<Float> inputs){
+    public CalculatorResponse subtract(@QueryParam("inputs") List<Float> inputs) throws Exception{
         MathProblem mathProblem = new MathProblem("-", inputs);
-        float result = mathProblem.getResult();
         mathProblems.add(mathProblem);
-        return new CalculatorResponse(result);
+        return new CalculatorResponse(mathProblem.getResult());
     }
 
     @GET
     @Path("/divide")
-    public CalculatorResponse divide(@QueryParam("inputs") List<Float> inputs){
+    public CalculatorResponse divide(@QueryParam("inputs") List<Float> inputs) throws Exception{
         MathProblem mathProblem = new MathProblem("/", inputs);
-        float result = mathProblem.getResult();
         mathProblems.add(mathProblem);
-        return new CalculatorResponse(result);
+        return new CalculatorResponse(mathProblem.getResult());
     }
 
     @GET
     @Path("/multiply")
-    public CalculatorResponse multiply(@QueryParam("inputs") List<Float> inputs){
+    public CalculatorResponse multiply(@QueryParam("inputs") List<Float> inputs) throws Exception{
         MathProblem mathProblem = new MathProblem("*", inputs);
-        float result = mathProblem.getResult();
         mathProblems.add(mathProblem);
-        return new CalculatorResponse(result);
+        return new CalculatorResponse(mathProblem.getResult());
     }
 
     @GET

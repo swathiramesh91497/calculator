@@ -15,6 +15,9 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 
 import javax.ws.rs.core.Configurable;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +34,20 @@ public class CalculatorApplication extends Application<CalculatorConfig> {
     public void setupResources(Configurable<?> config, CalculatorConfig calculatorConfig) {
         config.register(new CalculatorResource(calculatorConfig));
         config.register(new SwaggerFilesResource());
+        config.register(new CustomExceptionMapper());
+    }
+
+    @Provider
+    public static class CustomExceptionMapper implements ExceptionMapper<Exception> {
+        @Override
+        public Response toResponse(Exception exception) {
+            int statusCode = Response.Status.BAD_REQUEST.getStatusCode();
+            String errorMessage = exception.getMessage();
+            // Log the exception for internal debugging if necessary
+            return Response.status(statusCode)
+                    .entity(errorMessage)
+                    .build();
+        }
     }
 
     public static void main(String[] args) {
