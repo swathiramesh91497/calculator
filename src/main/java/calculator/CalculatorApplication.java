@@ -1,13 +1,23 @@
 package calculator;
 
 import io.confluent.rest.Application;
+import io.confluent.rest.RestConfig;
 import io.confluent.rest.RestConfigException;
-import org.apache.kafka.common.config.ConfigDef;
-import org.glassfish.jersey.servlet.ServletProperties;
+import org.checkerframework.checker.units.qual.A;
+import org.eclipse.jetty.security.*;
+import org.eclipse.jetty.security.authentication.BasicAuthenticator;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.util.security.Constraint;
+import org.eclipse.jetty.util.security.Credential;
+import org.eclipse.jetty.util.security.Password;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 import javax.ws.rs.core.Configurable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 public class CalculatorApplication extends Application<CalculatorConfig> {
@@ -25,14 +35,12 @@ public class CalculatorApplication extends Application<CalculatorConfig> {
 
     public static void main(String[] args) {
         try {
-            // This simple configuration is driven by the command line. Run with an argument to specify
-            // the format of the message returned by the API, e.g.
-            // java -jar rest-utils-examples.jar \
-            //    io.confluent.rest.examples.helloworld.HelloWorldApplication 'Goodbye, %s'
-            CalculatorConfig config = new CalculatorConfig();
+            HashMap<String, String> props = new HashMap<>();
+            props.put(RestConfig.AUTHENTICATION_METHOD_CONFIG, RestConfig.AUTHENTICATION_METHOD_BASIC);
+            CalculatorConfig config = new CalculatorConfig(props);
             CalculatorApplication app = new CalculatorApplication(config);
+
             app.start();
-            System.out.println("HERE");
             log.info("Server started, listening for requests...");
             app.join();
         } catch (RestConfigException e) {
@@ -42,6 +50,36 @@ public class CalculatorApplication extends Application<CalculatorConfig> {
             log.error("Server died unexpectedly: " + e.toString());
         }
     }
+
+    @Override
+    protected ConstraintMapping createGlobalAuthConstraint(){
+        Constraint constraint = new Constraint();
+        constraint.setRoles(new String[]{"users"});
+        constraint.setAuthenticate(true);
+        constraint.setName(Constraint.__BASIC_AUTH);
+
+        ConstraintMapping constraintMapping = new ConstraintMapping();
+        constraintMapping.setMethod("*");
+        constraintMapping.setPathSpec("/calculator/audit");
+        constraintMapping.setConstraint(constraint);
+
+        return constraintMapping;
+    }
+
+    @Override
+    protected LoginService createLoginService() {
+        HashLoginService loginService = new HashLoginService("Swathi's Service");
+        UserStore userStore = new UserStore();
+        userStore.addUser("admin", Credential.getCredential("password"), new String[] { "users"});
+        loginService.setUserStore(userStore);
+        return loginService;
+    }
+
+    @Override
+    protected IdentityService createIdentityService() {
+        return null;
+    }
+
 
 }
 

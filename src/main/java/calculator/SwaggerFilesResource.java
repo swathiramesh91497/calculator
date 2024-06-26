@@ -35,9 +35,4 @@ public class SwaggerFilesResource {
                 : Response.ok().entity(resource).build();
     }
 
-//    @GET
-//    @Path("/index.html")
-//    public Response index() throws IOException {
-//        return staticResources("swagger-ui/index.html");
-//    }
 }
