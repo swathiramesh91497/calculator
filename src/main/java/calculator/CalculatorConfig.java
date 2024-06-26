@@ -8,7 +8,6 @@ import java.util.Map;
 
 public class CalculatorConfig extends RestConfig {
     private static ConfigDef config;
-//    private static String authentication.method;
     static {
         config = baseConfigDef();
     }

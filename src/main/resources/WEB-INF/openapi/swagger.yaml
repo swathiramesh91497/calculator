@@ -12,23 +12,118 @@ tags:
 host: "localhost:8080/calculator"
 schemes:
   - "http"
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
 paths:
   /add:
     get:
       tags:
-        - Add two integers
+        - Add floats
       summary: |
-        Adds two integers
-      description: Given two integers, it adds them.
+        Adds floating point numbers
+      description: Given multiple floating point numbers, it adds them.
       operationId: add
       parameters:
         - name: inputs
           in: query
           required: true
-          description: Any integers to add
-          type: List<Float>
+          description: Any floats to subtract
+          explode: true
+          type: array
+          collectionFormat: multi
+          items:
+            type: float
       responses:
         '200':
           description: Authenticated
         '404':
-          description: Invalid input. Expecting 32-bit integers.
+          description: Invalid input.
+  /subtract:
+    get:
+      tags:
+        - Subtract floats
+      summary: |
+        Subtracts floating point numbers
+      description: Given floating point numbers, it subtracts them.
+      operationId: subtract
+      parameters:
+        - name: inputs
+          in: query
+          required: true
+          description: Any floats to subtract
+          explode: true
+          type: array
+          collectionFormat: multi
+          items:
+            type: float
+      responses:
+        '200':
+          description: Authenticated
+        '404':
+          description: Invalid input.
+  /multiply:
+    get:
+      tags:
+        - Multiply floats
+      summary: |
+        Multiplies floating point numbers
+      description: Given floating point numbers, it multiplies them.
+      operationId: multiply
+      parameters:
+        - name: inputs
+          in: query
+          required: true
+          description: Any floats to multiply
+          explode: true
+          type: array
+          collectionFormat: multi
+          items:
+            type: float
+      responses:
+        '200':
+          description: Authenticated
+        '404':
+          description: Invalid input.
+  /divide:
+    get:
+      tags:
+        - Divides floats
+      summary: |
+        Divides floating point numbers
+      description: Given floating point numbers, it divides them.
+      operationId: divide
+      parameters:
+        - name: inputs
+          in: query
+          required: true
+          description: Any floats to divide
+          explode: true
+          type: array
+          collectionFormat: multi
+          items:
+            type: float
+      responses:
+        '200':
+          description: Authenticated
+        '404':
+          description: Invalid input.
+  /audit:
+    get:
+      tags:
+        - Returns a list of previous calculations
+      summary: |
+        Returns a list of previous calculations.
+      description: Returns a list of previous calculations. Requires username/password
+      operationId: audit
+      security:
+        - BasicAuth: [ admin ]
+      responses:
+        '200':
+          description: Authenticated
+        '404':
+          description: Invalid input.
+        '401':
+          description: Unauthorized request.
