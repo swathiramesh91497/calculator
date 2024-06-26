@@ -26,6 +26,9 @@ public class MathProblem {
     public MathProblem(String operation, List<Float> inputs) throws Exception {
         this.operation = operation;
         this.inputs = inputs;
+        if (inputs.size() < 1){
+            throw new Exception("Not enough inputs provided: " + operation);
+        }
         this.result = computeResult();
     }
 
